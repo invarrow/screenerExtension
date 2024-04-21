@@ -22,8 +22,11 @@
   };
 
 async function scrapeData() {
-  const yLink = "https://www.screener.in/screens/1652356/yab/?sort=market+capitalization&order=desc";
-  const mLink = yLink;
+  // get current link of the current website
+  const currLink = window.location.href;
+
+
+  const mLink = currLink;
   const headers = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36',
     'accept-language': 'en,gu;q=0.9,hi;q=0.8',
@@ -50,7 +53,6 @@ async function scrapeData() {
           cols[i] = cols[i].split("\n")[0]+" "+cols[i].split("\n")[1];
         }
       }
-      console.log("COLUMN HEAD DATA",cols);
       data.push(cols.filter(ele => ele));
     });
 
@@ -81,7 +83,9 @@ async function scrapeData() {
           const symcode = symlink.split('/')[2];
           datas.push([symcode]);
           const cols = Array.from(row.querySelectorAll('td')).map(ele => ele.textContent.trim());
-          data.push(cols.filter(ele => ele));
+          // if data is empty make it 0
+          data.push(cols.map(ele => ele === '' ? 0 : ele));
+
         }
       });
     }
@@ -93,6 +97,7 @@ async function scrapeData() {
 
     rows = df.split('\n');
     const filteredRows = rows.filter(row => row.trim() !== '');
+    console.log("FILTERED ROWS",filteredRows);
     const finalDf = filteredRows.join('\n');
 
     const finalData = finalDf.split('\n').map((row, index) => {
