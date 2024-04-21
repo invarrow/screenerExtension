@@ -1,4 +1,4 @@
-Screener extension
+Screener scrape extension
 
 **Steps to use:**
 

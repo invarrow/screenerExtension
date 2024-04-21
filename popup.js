@@ -2,10 +2,8 @@
   // Find the div with the class name "dropdown-filter"
   var dropdownFilter = document.getElementsByClassName('dropdown-filter');
   console.log(dropdownFilter);
-  console.log("1yerr");
 
   if (dropdownFilter) {
-    console.log("yerr");
     // Create a new button element
     var button = document.createElement('button');
     button.textContent = 'Freemium Export';
@@ -66,6 +64,7 @@ async function scrapeData() {
     });
 
     for (let x = 1; x <= pagen; x++) {
+      try{
       console.log(x);
       const sLink = mLink + "?limit=50&page=" + x;
       const response = await fetch(sLink, { headers });
@@ -88,6 +87,9 @@ async function scrapeData() {
 
         }
       });
+  } catch (error) {
+    console.error('Error:', error);
+  }
     }
 
     const df = data.map(row => row.join(',')).join('\n');
